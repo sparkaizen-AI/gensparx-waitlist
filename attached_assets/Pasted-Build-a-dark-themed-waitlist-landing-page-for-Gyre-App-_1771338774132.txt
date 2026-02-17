@@ -1,0 +1,42 @@
+Build a dark-themed waitlist landing page for "Gyre App" — an End-to-end Web3 CRM.
+Reference: I have pasted a screenshot of the exact design to replicate. Match it pixel-for-pixel.
+Tech Stack:
+Frontend: Next.js (React) — use the App Router (app/ directory). All styling via Tailwind CSS. Single page component at app/page.tsx. No backend needed.
+Overall Design:
+Full-viewport dark page (#0a0a0a / near-black background). Subtle noise/grain texture overlay on the background for depth. Very minimal, premium aesthetic — no clutter.
+Layout (centered, single column):
+Everything centered horizontally on the page. Slight vertical centering bias toward upper-middle of the viewport. Use a flex column layout on the full min-h-screen.
+Top label:
+Small muted text: Gyre App | End-to-end CRM — light gray, small font size (~13px), letter-spacing wide (tracking-widest), placed above the headline with a short horizontal divider line above it (thin, ~60px wide, rgba(255,255,255,0.2)).
+Headline (two lines, large):
+
+Line 1: Join the waitlist for — white/light gray, thin font weight (font-light), large (~52–60px)
+Line 2: the Manage web3 Relationships — mixed styling: "the Manage" in white, "web3 Relationships" in a soft periwinkle/lavender-blue glow (use #8B9FE8 or #9BA8E8), same large size. Add a subtle text-shadow glow effect on the colored words using inline style: textShadow: '0 0 20px rgba(139, 159, 232, 0.6)'.
+
+Form (centered, max-width ~340px, full width on mobile):
+Three stacked elements (flex flex-col gap-2) with rounded corners (rounded-lg), dark semi-transparent fills (bg-white/5), subtle border (border border-white/8):
+
+Name input — left-aligned SVG user icon inside the input (use a relative wrapper + absolute positioned icon), placeholder: Full name..., no label, text white, placeholder gray
+Email input — left-aligned SVG envelope icon same pattern, placeholder: Address email.., no label
+Submit button — slightly lighter dark background (bg-white/10), full width, text: Join the waitlist in white centered, right-aligned arrow (→) absolutely positioned right side. On hover: hover:bg-white/15 and a subtle border glow (hover:border-white/20). Use transition-all duration-200.
+
+All inputs and button: consistent padding (py-3.5 px-4 pl-11), rounded-lg, text-sm, outline-none, focus:ring-1 focus:ring-white/20.
+Divider:
+A thin horizontal line (border-t border-white/10, width ~200px) centered below the form with mt-16 mb-8.
+Footer social links:
+Two social items side by side (flex gap-0) separated by a thin vertical divider (border-r border-white/10):
+
+Left card: Twitter SVG bird icon (white, ~20px) + Twitter in white font-semibold text-sm + @gyreapp in muted gray text-xs below — stacked, pr-10
+Right card: Medium "M" SVG icon (white, ~20px) + Medium bold + @gyreapp muted gray — pl-10
+
+Both cards: flex items-center gap-3.
+Typography:
+Import Inter from next/font/google. Apply to the root layout. Weights: 300, 400, 600.
+File structure to generate:
+
+app/layout.tsx — root layout with font + dark background
+app/page.tsx — full waitlist page component
+app/globals.css — base Tailwind directives
+tailwind.config.ts — standard Next.js Tailwind config
+
+No animations required unless adding a subtle animate-fade-in on mount. Keep it clean, static, and fully responsive.
