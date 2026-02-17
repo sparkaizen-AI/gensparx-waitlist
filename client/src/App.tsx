@@ -1,7 +1,7 @@
-import HomeSupabase from "@/pages/Home-supabase";
+import HomeDebug from "@/pages/Home-debug";
 
 function App() {
-  return <HomeSupabase />;
+  return <HomeDebug />;
 }
 
 export default App;
