@@ -1,7 +1,7 @@
-import HomeFinal from "@/pages/Home-final";
+import HomeClean from "@/pages/Home-clean";
 
 function App() {
-  return <HomeFinal />;
+  return <HomeClean />;
 }
 
 export default App;
