@@ -1,7 +1,7 @@
-import HomeClean from "@/pages/Home-clean";
+import HomeDiagnostic from "@/pages/Home-diagnostic";
 
 function App() {
-  return <HomeClean />;
+  return <HomeDiagnostic />;
 }
 
 export default App;
