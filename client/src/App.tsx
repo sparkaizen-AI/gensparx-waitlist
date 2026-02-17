@@ -1,7 +1,7 @@
-import HomeSimpleWorking from "@/pages/Home-simple-working";
+import HomeFinal from "@/pages/Home-final";
 
 function App() {
-  return <HomeSimpleWorking />;
+  return <HomeFinal />;
 }
 
 export default App;
