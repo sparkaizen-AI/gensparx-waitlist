@@ -1,7 +1,7 @@
-import HomeRobust from "@/pages/Home-robust";
+import HomeTest from "@/pages/Home-test";
 
 function App() {
-  return <HomeRobust />;
+  return <HomeTest />;
 }
 
 export default App;
