@@ -1,7 +1,7 @@
-import HomeDebug from "@/pages/Home-debug";
+import HomeRobust from "@/pages/Home-robust";
 
 function App() {
-  return <HomeDebug />;
+  return <HomeRobust />;
 }
 
 export default App;

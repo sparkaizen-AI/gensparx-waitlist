@@ -30,13 +30,14 @@ export default function Home() {
     }
     
     try {
-      setDebugInfo("Making API call to Supabase...");
+      setDebugInfo("Connecting to Supabase...");
       
+      // Use REST API with proper headers
       const supabaseUrl = 'https://ntlmkgbxhnhkzfnfwsnx.supabase.co';
       const supabaseKey = 'sb_publishable_-YHYYnOh8l6QQFAgp3Nxqw_yhUN9LVX';
       
-      console.log("API URL:", supabaseUrl);
-      console.log("API Key:", supabaseKey ? "Key exists" : "Key missing");
+      console.log("Attempting connection to:", supabaseUrl);
+      console.log("API Key provided:", supabaseKey ? "Yes" : "No");
       
       const response = await fetch(`${supabaseUrl}/rest/v1/waitlist`, {
         method: 'POST',
@@ -44,7 +45,7 @@ export default function Home() {
           'Content-Type': 'application/json',
           'apikey': supabaseKey,
           'Authorization': `Bearer ${supabaseKey}`,
-          'Prefer': 'return=minimal'
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
           name: formData.name.trim(),
@@ -55,26 +56,50 @@ export default function Home() {
 
       setDebugInfo(`Response status: ${response.status}`);
       
-      const responseText = await response.text();
-      setDebugInfo(`Response text: ${responseText}`);
-      
       if (!response.ok) {
-        console.error("API Error:", responseText);
-        throw new Error(`API Error: ${response.status} - ${responseText}`);
+        const errorText = await response.text();
+        console.error("API Error Details:", {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+        
+        if (response.status === 401) {
+          throw new Error("Authentication failed. Please check API key.");
+        } else if (response.status === 403) {
+          throw new Error("Access forbidden. Check RLS policies.");
+        } else if (response.status === 422) {
+          throw new Error("Invalid data. Please check your input.");
+        } else {
+          throw new Error(`Server error: ${response.status}`);
+        }
       }
 
       const result = await response.json();
-      console.log("Success:", result);
+      console.log("Success! Data submitted:", result);
 
       setIsSuccess(true);
       setMessage("Welcome aboard! You've been added to the GenSparx priority list.");
       setFormData({ name: "", email: "" });
       setIsPending(false);
+      setDebugInfo("✅ Successfully submitted to Supabase!");
       
     } catch (error: any) {
-      console.error("Full error:", error);
-      setMessage(`Error: ${error.message || "Unknown error occurred"}`);
+      console.error("Full error details:", error);
+      
+      // Handle different types of errors
+      if (error.message.includes("Failed to fetch")) {
+        setMessage("Network error. Please check your connection and try again.");
+      } else if (error.message.includes("Authentication")) {
+        setMessage("Authentication failed. Please contact support.");
+      } else if (error.message.includes("CORS")) {
+        setMessage("CORS error. Please check Supabase settings.");
+      } else {
+        setMessage(`Error: ${error.message || "Unknown error occurred"}`);
+      }
+      
       setIsPending(false);
+      setDebugInfo("❌ Submission failed");
     }
   };
 
@@ -116,7 +141,7 @@ export default function Home() {
           <span className="block">
             <span className="text-white/90">the </span>
             <span className="text-[#8B9FE8] font-normal">
-               AI That Actually Does the Work
+              An AI That Actually Does the Work
             </span>
           </span>
         </motion.h1>
@@ -124,7 +149,7 @@ export default function Home() {
         {/* Debug Info */}
         {debugInfo && (
           <div className="w-full max-w-[340px] mb-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-            <p className="text-xs text-yellow-300 font-mono">{debugInfo}</p>
+            <p className="text-xs text-yellow-300 font-mono break-all">{debugInfo}</p>
           </div>
         )}
 
