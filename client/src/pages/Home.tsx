@@ -5,8 +5,8 @@ import { insertWaitlistSchema, type InsertWaitlist } from "@shared/schema";
 import { useJoinWaitlist } from "@/hooks/use-waitlist";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Mail, ArrowRight, Loader2, Twitter } from "lucide-react";
-import { SiMedium } from "react-icons/si";
+import { User, Mail, ArrowRight, Loader2 } from "lucide-react";
+import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 
 export default function Home() {
   const { toast } = useToast();
@@ -59,7 +59,7 @@ export default function Home() {
         >
           <div className="w-[60px] h-[1px] bg-white/20" />
           <span className="text-[13px] tracking-[0.2em] text-white/40 uppercase font-medium">
-            Gyre App | End-to-end CRM
+            GenSparx | AI-Powered Platform
           </span>
         </motion.div>
 
@@ -72,9 +72,9 @@ export default function Home() {
         >
           <span className="block text-white/90">Join the waitlist for</span>
           <span className="block">
-            <span className="text-white/90">the Manage </span>
+            <span className="text-white/90">the </span>
             <span className="text-[#8B9FE8] text-glow font-normal">
-              web3 Relationships
+               AI That Actually Does the Work
             </span>
           </span>
         </motion.h1>
@@ -145,7 +145,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-medium text-white">You're on the list!</h3>
                 <p className="text-sm text-white/60 text-center px-6">
-                  We'll notify you as soon as Gyre is ready for you.
+                  We'll notify you as soon as GenSparx is ready for you.
                 </p>
                 <button 
                   onClick={() => setIsSuccess(false)}
@@ -163,21 +163,25 @@ export default function Home() {
       <footer className="absolute bottom-8 left-0 right-0 z-10">
         <div className="flex items-center justify-center gap-6">
           <a 
-            href="#" 
+            href="https://x.com/GenSparx" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-white/40 hover:text-white transition-colors duration-300 transform hover:scale-110"
-            aria-label="Twitter"
+            aria-label="X (Twitter)"
           >
-            <Twitter size={20} strokeWidth={1.5} />
+            <FaXTwitter size={20} />
           </a>
           
           <div className="w-[1px] h-4 bg-white/10" />
           
           <a 
-            href="#" 
+            href="https://www.instagram.com/trygensparx/" 
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-white/40 hover:text-white transition-colors duration-300 transform hover:scale-110"
-            aria-label="Medium"
+            aria-label="Instagram"
           >
-            <SiMedium size={20} />
+            <FaInstagram size={20} />
           </a>
         </div>
       </footer>
