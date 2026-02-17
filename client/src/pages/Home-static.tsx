@@ -91,7 +91,7 @@ export default function Home() {
         >
           <div className="w-[60px] h-[1px] bg-white/20" />
           <span className="text-[13px] tracking-[0.2em] text-white/40 uppercase font-medium">
-            GenSparx | AI-Powered Platform
+            GenSparx | AI-Powered Platform - Updated {new Date().toISOString()}
           </span>
         </motion.div>
 
