@@ -175,9 +175,9 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="absolute bottom-8 left-0 right-0 z-10">
-        <div className="flex items-center justify-center gap-6">
+      {/* Footer - Fixed mobile positioning */}
+      <footer className="absolute bottom-4 left-0 right-0 z-10 sm:bottom-8">
+        <div className="flex items-center justify-center gap-6 px-4">
           <a 
             href="https://x.com/GenSparx" 
             target="_blank"
