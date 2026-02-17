@@ -1,7 +1,7 @@
-import HomeOffline from "@/pages/Home-offline";
+import Home from "@/pages/Home";
 
 function App() {
-  return <HomeOffline />;
+  return <Home />;
 }
 
 export default App;
