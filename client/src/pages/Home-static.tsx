@@ -1,43 +1,75 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertWaitlistSchema, type InsertWaitlist } from "@shared/schema";
-import { useJoinWaitlist } from "@/hooks/use-waitlist";
+import { z } from "zod";
+import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Mail, ArrowRight, Loader2 } from "lucide-react";
 import { FaXTwitter, FaInstagram } from "react-icons/fa6";
 
+const waitlistSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+});
+
+type WaitlistData = z.infer<typeof waitlistSchema>;
+
 export default function Home() {
   const { toast } = useToast();
-  const joinWaitlist = useJoinWaitlist();
+  const [isPending, setIsPending] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const form = useForm<InsertWaitlist>({
-    resolver: zodResolver(insertWaitlistSchema),
+  const form = useForm<WaitlistData>({
+    resolver: zodResolver(waitlistSchema),
     defaultValues: {
       name: "",
       email: "",
     },
   });
 
-  const onSubmit = (data: InsertWaitlist) => {
-    joinWaitlist.mutate(data, {
-      onSuccess: () => {
-        setIsSuccess(true);
-        toast({
-          title: "Welcome aboard!",
-          description: "You've been added to the priority list.",
-        });
-      },
-      onError: (error) => {
+  const onSubmit = async (data: WaitlistData) => {
+    setIsPending(true);
+    try {
+      // Check if email already exists
+      const { data: existing } = await supabase
+        .from('waitlist')
+        .select('*')
+        .eq('email', data.email)
+        .single();
+
+      if (existing) {
         toast({
           variant: "destructive",
-          title: "Couldn't join",
-          description: error.message,
+          title: "Already registered",
+          description: "This email is already on the waitlist.",
         });
-      },
-    });
+        return;
+      }
+
+      // Add to waitlist
+      const { error } = await supabase
+        .from('waitlist')
+        .insert([data]);
+
+      if (error) {
+        throw error;
+      }
+
+      setIsSuccess(true);
+      toast({
+        title: "Welcome aboard!",
+        description: "You've been added to the priority list.",
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Couldn't join",
+        description: error.message || "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -74,7 +106,7 @@ export default function Home() {
           <span className="block">
             <span className="text-white/90">the </span>
             <span className="text-[#8B9FE8] text-glow font-normal">
-               AI That Actually Does the Work
+              An AI That Actually Does the Work
             </span>
           </span>
         </motion.h1>
@@ -101,7 +133,7 @@ export default function Home() {
                     type="text"
                     placeholder="Full Name"
                     className="w-full h-12 pl-12 pr-4 rounded-lg glass-input outline-none text-sm font-light"
-                    disabled={joinWaitlist.isPending}
+                    disabled={isPending}
                   />
                 </div>
 
@@ -114,19 +146,19 @@ export default function Home() {
                     type="email"
                     placeholder="Email Address"
                     className="w-full h-12 pl-12 pr-4 rounded-lg glass-input outline-none text-sm font-light"
-                    disabled={joinWaitlist.isPending}
+                    disabled={isPending}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={joinWaitlist.isPending}
+                  disabled={isPending}
                   className="w-full h-12 mt-4 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10 hover:border-white/20 text-white text-sm font-medium transition-all duration-300 flex items-center justify-between px-6 group disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="mx-auto pl-4">
-                    {joinWaitlist.isPending ? "Joining..." : "Join the waitlist"}
+                    {isPending ? "Joining..." : "Join the waitlist"}
                   </span>
-                  {joinWaitlist.isPending ? (
+                  {isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin text-white/50" />
                   ) : (
                     <ArrowRight className="w-4 h-4 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all" />
@@ -145,7 +177,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-medium text-white">You're on the list!</h3>
                 <p className="text-sm text-white/60 text-center px-6">
-                  Get ready. GenSparx is about to flip the script on everything you thought was possible.
+                  "Get ready. GenSparx is about to flip the script on everything you thought was possible."
                 </p>
                 <button 
                   onClick={() => setIsSuccess(false)}
