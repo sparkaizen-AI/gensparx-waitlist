@@ -1,7 +1,7 @@
-import HomeDiagnostic from "@/pages/Home-diagnostic";
+import HomeFinalWorking from "@/pages/Home-final-working";
 
 function App() {
-  return <HomeDiagnostic />;
+  return <HomeFinalWorking />;
 }
 
 export default App;
